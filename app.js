@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Listing = require('./models/listing'); // Import the Listing model
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require("./utils/wrapAsync.js")
+const wrapAsync = require("./utils/wrapAsync.js").default
 const ExpressError = require("./utils/expressError.js");
 const { default: expressError } = require('./utils/expressError.js');
 const {listingSchema} = require("./schema.js")
@@ -27,11 +27,16 @@ async function main() {
 }
 
 const validateListing = (req, res, next)=>{
+
   let {error} = listingSchema.validate(req.body)
+  console.log(req.body)
   if(error){
+    console.log("IF START")
     let {errorMsg} = error.details.map((el) => el.message).join(",");
+    console.log(errorMsg)
     throw new expressError(400 , errorMsg)
   }else{
+    console.log("ELSE START")
     next()
   }
 }
@@ -48,7 +53,9 @@ app.get("/listings/new", (req, res) => {
 });
 
 // (CREATE) CREATE ROUTE
-app.post("/listings", validateListing, wrapAsync( async (req, res , next) => {
+app.post("/listings",
+  validateListing,
+  wrapAsync( async (req, res , next) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect(`/listings`);
@@ -60,8 +67,6 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
     res.render("listings/show", { listing: listingItem });
 }));
 
-
-
 // (UPDATE) EDIT ROUTE
 app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
   let listingItem = await Listing.findById(req.params.id);
@@ -69,10 +74,12 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 // (UPDATE) UPDATE ROUTE
-app.put("/listings/:id",validateListing, wrapAsync( async (req, res) => {
+app.put("/listings/:id", 
+  validateListing , 
+  wrapAsync( async (req, res) => {
+  console.log("UPDATED");
   let { id } = req.params;
   await Listing.findByIdAndUpdate(id , {...req.body.listing})
-  // console.log("UPDATED");
   res.redirect(`/listings/${id}`);
 }));
 

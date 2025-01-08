@@ -13,10 +13,11 @@
                         <p class="show-all-text">Country: <%= listing.country %></p>
                         <br>
                         <a class="show-e-btn-a" href="/listings/<%= listing._id %>/edit">
-                        <button type="button" class="btn btn-primary show-e-btn">Edit</button>
+                                <button type="button" class="btn btn-primary show-e-btn">Edit</button>
                         </a>
+
                         <form class="show-d-btn-a" action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
-                                <button type="button" class="btn btn-danger show-d-btn">Delete</button>
+                                <button type="submit" class="btn btn-danger show-d-btn">Delete</button> <!-- Corrected type="submit" -->
                         </form>
 
                 </div>  
