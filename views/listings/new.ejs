@@ -1,0 +1,48 @@
+<% layout("/layouts/boilerplate") %>
+<body class="new-listing">
+
+    <div class="container">
+        <h1 class="n-f-h1">Create a New Listing</h1>
+        <form action="/listings" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" name="listing[title]" id="title" required>
+                <div class="invalid-feedback">Please provide a title.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="listing[description]" id="description" required></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input class="form-control" name="listing[price]" id="price" required>
+                <div class="invalid-feedback">Please provide a valid price.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" name="listing[location]" id="location" required>
+                <div class="invalid-feedback">Please provide a location.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <input type="text" class="form-control" name="listing[country]" id="country" required>
+                <div class="invalid-feedback">Please provide a country.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Image URL</label>
+                <input type="text" class="form-control" name="listing[image]" id="image">
+                <div class="invalid-feedback">Please provide a valid URL.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add New</button>
+        </form>
+        <br><br><br>
+    </div>
+   
+</body>
