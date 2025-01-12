@@ -1,25 +1,92 @@
 <% layout("/layouts/boilerplate") %>
 <body class="show-body">
-        <div class="show-container">
-                <div class="show-container-inner">
-                        <h1 class="show-all-text"> <%= listing.title %> </h1>
-                        <p class="show-all-text"><%= listing.description %></p>
-                        <div class="show-img-container">
-                                <img class="show-img" src="<%= listing.image.url %>" alt="<%= listing.title %>">
-                        </div>
-                        <br>
-                        <p class="show-all-text">Price: <b> &#8377; <%= listing.price.toLocaleString("en-IN") %></b></p>
-                        <p class="show-all-text">Location: <%= listing.location %></p>
-                        <p class="show-all-text">Country: <%= listing.country %></p>
-                        <br>
-                        <a class="show-e-btn-a" href="/listings/<%= listing._id %>/edit">
-                                <button type="button" class="btn btn-primary show-e-btn">Edit</button>
-                        </a>
+  <div class="show-container">
+    <div class="show-container-inner">
+      <h1 class="show-all-text"><%= listing.title %></h1>
+      <p class="show-all-text"><%= listing.description %></p>
+      <div class="show-img-container">
+        <img
+          class="show-img"
+          src="<%= listing.image.url %>"
+          alt="<%= listing.title %>"
+        />
+      </div>
+      <br />
+      <p class="show-all-text">
+        Price: <b> &#8377; <%= listing.price.toLocaleString("en-IN") %></b>
+      </p>
+      <p class="show-all-text">Location: <%= listing.location %></p>
+      <p class="show-all-text">Country: <%= listing.country %></p>
+      <br />
+      <a class="show-e-btn-a" href="/listings/<%= listing._id %>/edit">
+        <button type="button" class="btn btn-primary show-e-btn">Edit</button>
+      </a>
 
-                        <form class="show-d-btn-a" action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
-                                <button type="submit" class="btn btn-danger show-d-btn">Delete</button> <!-- Corrected type="submit" -->
-                        </form>
+      <form
+        class="show-d-btn-a"
+        action="/listings/<%= listing._id %>?_method=DELETE"
+        method="POST"
+      >
+        <button type="submit" class="btn btn-danger show-d-btn">Delete</button>
+        <!-- Corrected type="submit" -->
+      </form>
+    </div>
+    <hr />
 
-                </div>  
+    <div class="review">
+      <h4>Leave A Review</h4>
+      <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Ratings</label>
+          <input
+            type="range"
+            class="form-range"
+            min="1"
+            max="5"
+            value="3"
+            id="rating"
+            name="review[rating]"
+          />
+          <div class="d-flex justify-content-between">
+            <small>1</small>
+            <small>2</small>
+            <small>3</small>
+            <small>4</small>
+            <small>5</small>
+          </div>
         </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label">Comments</label>
+          <textarea
+            class="form-control"
+            name="review[comment]"
+            id="comment"
+            cols="30"
+            rows="5"
+            required
+            placeholder="Write your comments here..."
+          ></textarea>
+          <div class="invalid-feedback"> 
+                Can't Submit Review Without Comment <br> <b>Comments Are required</b> 
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+      </form>
+
+      <hr>
+
+        <h4>All Reviews</h4>
+        <ul>
+                <% for(ele of listing.review){ %>
+
+                        <li> <%= ele %></li>
+
+                <% } %>
+        </ul>
+
+
+
+    </div>
+    <br /><br /><br /><br />
+  </div>
 </body>
