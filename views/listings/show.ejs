@@ -1,5 +1,13 @@
 <% layout("/layouts/boilerplate") %>
+
+<script>
+  const MAPTOKEN = "<%= process.env.MAP_TOKEN %>"
+  const listing = <%- JSON.stringify( listing ) %>
+
+</script>
+
 <body class="show-body">
+
   <div class="show-container">
     <div class="show-container-inner">
       <h1 class="show-all-text"><%= listing.title %></h1>
@@ -12,82 +20,140 @@
         />
       </div>
       <br />
+      <p class="show-all-text">Owned by: <%= listing.owner.username %></p>
+      
+      <!-- <p class="show-all-text">cod<%= listing.geometry.coordinates %></p> -->
       <p class="show-all-text">
         Price: <b> &#8377; <%= listing.price.toLocaleString("en-IN") %></b>
       </p>
       <p class="show-all-text">Location: <%= listing.location %></p>
       <p class="show-all-text">Country: <%= listing.country %></p>
       <br />
-      <a class="show-e-btn-a" href="/listings/<%= listing._id %>/edit">
-        <button type="button" class="btn btn-primary show-e-btn">Edit</button>
-      </a>
 
-      <form
-        class="show-d-btn-a"
-        action="/listings/<%= listing._id %>?_method=DELETE"
-        method="POST"
-      >
-        <button type="submit" class="btn btn-danger show-d-btn">Delete</button>
-        <!-- Corrected type="submit" -->
-      </form>
+      <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
+        
+        <div>
+            <a class="show-e-btn-a" href="/listings/<%= listing._id %>/edit">
+              <button type="button" class="btn btn-primary show-e-btn">Edit</button>
+            </a>
+            <form
+              class="show-d-btn-a"
+              action="/listings/<%= listing._id %>?_method=DELETE"
+              method="POST"
+            >
+              <button type="submit" class="btn btn-danger show-d-btn">Delete</button>
+            </form>
+          </div>
+          <hr />
+      <% } %>
+
     </div>
-    <hr />
+  
+
+
 
     <div class="review">
-      <h4>Leave A Review</h4>
-      <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
-        <div class="mb-3">
-          <label for="rating" class="form-label">Ratings</label>
-          <input
-            type="range"
-            class="form-range"
-            min="1"
-            max="5"
-            value="3"
-            id="rating"
-            name="review[rating]"
-          />
-          <div class="d-flex justify-content-between">
-            <small>1</small>
-            <small>2</small>
-            <small>3</small>
-            <small>4</small>
-            <small>5</small>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label for="comment" class="form-label">Comments</label>
-          <textarea
-            class="form-control"
-            name="review[comment]"
-            id="comment"
-            cols="30"
-            rows="5"
-            required
-            placeholder="Write your comments here..."
-          ></textarea>
-          <div class="invalid-feedback"> 
-                Can't Submit Review Without Comment <br> <b>Comments Are required</b> 
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
-      </form>
+      <% if(currUser){ %>
+          <h4>Leave Your Review</h4>
+          <form
+            action="/listings/<%= listing._id %>/reviews"
+            method="POST"
+            novalidate
+            class="needs-validation"
+          >
+            <div class="mb-3">
+              <label for="rating" class="form-label">Ratings</label>
+              <input
+                type="range"
+                class="form-range"
+                min="1"
+                max="5"
+                value="3"
+                id="rating"
+                name="review[rating]"
+              />
+              <div class="d-flex justify-content-between rating-num">
+                <small>1⭐</small>
+                <small>2⭐</small>
+                <small>3⭐</small>
+                <small>4⭐</small>
+                <small>5⭐</small>
+              </div>
+            </div>
 
-      <hr>
 
+
+            <div class="mb-3">
+              <label for="comment" class="form-label">Comments</label>
+              <textarea
+                class="form-control"
+                name="review[comment]"
+                id="comment"
+                cols="30"
+                rows="5"
+                required
+                placeholder="Write your comments here..."
+              ></textarea>
+              <div class="invalid-feedback">
+                Can't Submit Review Without Comment <br />
+                <b>Comments Are Required</b>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
+          </form>
+      <% } %>
+
+      <hr />
+
+      
+      <% if (reviews.length > 0) { %> 
         <h4>All Reviews</h4>
-        <p> <%= listing.review %> </p>
-        <!-- <ul>
-                <% for(ele of listing.review){ %>
+      <% } %> 
 
-                        <li> <%= ele.comment %></li>
+      <ul class="review-ul">
+        <% for (let ele of reviews) { %>
+          <% if (ele) { %> 
+            <div class="card card-div" style="width: 100%">
+              <div class="card-body">
+                <p class="card-title">
+                  <%= new Date(ele.created_at).toLocaleString("en-IN", { month: "long" }) %> 
+                  <%= new Date(ele.created_at).getFullYear() %>
+                </p>
+                <h6>   @<%= ele.username %>  </h6>
+                <h6 class="card-subtitle mb-2 text-muted">
+                 
 
-                <% } %>
-        </ul> -->
+                  <% for (let i = 1 ; i<= ele.rating ; i++) { %>
+                    <svg fill="#fcd53f" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve" stroke="#525252"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M165,0C74.019,0,0,74.019,0,165s74.019,165,165,165s165-74.019,165-165S255.981,0,165,0z M165,300 c-74.439,0-135-60.561-135-135S90.561,30,165,30s135,60.561,135,135S239.439,300,165,300z"></path> <path d="M247.157,128.196l-47.476-6.9l-21.23-43.019c-2.527-5.12-7.741-8.362-13.451-8.362s-10.924,3.242-13.451,8.362 l-21.23,43.019l-47.476,6.9c-5.65,0.821-10.345,4.779-12.108,10.209c-1.765,5.43-0.293,11.391,3.796,15.376l34.353,33.486 l-8.109,47.282c-0.965,5.628,1.349,11.315,5.968,14.671c4.618,3.355,10.741,3.799,15.797,1.142L165,228.039l42.462,22.323 c2.195,1.154,4.592,1.723,6.979,1.723c0.017,0,0.033,0,0.05,0c8.271-0.015,14.972-6.725,14.972-15c0-1.152-0.13-2.274-0.375-3.352 l-7.97-46.466l34.352-33.486c4.089-3.985,5.561-9.946,3.796-15.376C257.502,132.975,252.808,129.017,247.157,128.196z"></path> </g> </g></svg>
+                  <% } %>
+                  <% for (let i = 1 ; i<= (5 - ele.rating) ; i++) { %>
+                    <svg fill="#525252" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve" stroke="#525252"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M165,0C74.019,0,0,74.019,0,165s74.019,165,165,165s165-74.019,165-165S255.981,0,165,0z M165,300 c-74.439,0-135-60.561-135-135S90.561,30,165,30s135,60.561,135,135S239.439,300,165,300z"></path> <path d="M247.157,128.196l-47.476-6.9l-21.23-43.019c-2.527-5.12-7.741-8.362-13.451-8.362s-10.924,3.242-13.451,8.362 l-21.23,43.019l-47.476,6.9c-5.65,0.821-10.345,4.779-12.108,10.209c-1.765,5.43-0.293,11.391,3.796,15.376l34.353,33.486 l-8.109,47.282c-0.965,5.628,1.349,11.315,5.968,14.671c4.618,3.355,10.741,3.799,15.797,1.142L165,228.039l42.462,22.323 c2.195,1.154,4.592,1.723,6.979,1.723c0.017,0,0.033,0,0.05,0c8.271-0.015,14.972-6.725,14.972-15c0-1.152-0.13-2.274-0.375-3.352 l-7.97-46.466l34.352-33.486c4.089-3.985,5.561-9.946,3.796-15.376C257.502,132.975,252.808,129.017,247.157,128.196z"></path> </g> </g></svg>
+                  <% } %>
 
+                </h6>
 
+                <p class="card-text"><%= ele.comment %></p>
+                <form method="POST" action="/listings/<%=listing._id%>/reviews/<%=ele._id%>?_method=DELETE" >
+                  <button  class="btn btn-primary">Delete</button>
+                </form>
+              </div>
+            </div>
+          <% } %>
+        <% } %>
+      </ul>
 
     </div>
+
+    <div class="map-box">
+      <h4>Whare you'll be</h4>
+        <div id="map"></div>
+    </div>
+
     <br /><br /><br /><br />
   </div>
+
+ 
 </body>
+
+
+<script src="/js/map.js"></script>

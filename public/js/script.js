@@ -17,3 +17,21 @@
           }, false)
         })
       })()
+
+
+
+
+// TAX SWITCH FUN....
+
+let tax_toggle = document.querySelector("#flexSwitchCheckDefault")
+let taxinfo = document.querySelectorAll(".taxinfo")
+
+tax_toggle.addEventListener("click" , ()=>{
+    for (const element of taxinfo) {
+      if(element.style.display == "block"){
+        element.style.display = "none"
+      }else{
+         element.style.display = "block"
+      }
+    }
+})

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const review = require("./review");
+const review = require("./review.js");
+const { required } = require("joi");
 const schema = mongoose.Schema;
 
 const listingSchema = new schema({
@@ -9,12 +10,8 @@ const listingSchema = new schema({
         },
         description: String,
         image: {
-                filename: String,
-                url: {
-                        type: String,
-                        default: "https://media.istockphoto.com/id/1028621094/photo/service-bell-on-hotel-reception-desk.jpg?s=2048x2048&w=is&k=20&c=-YJfkchCeNBeSOyAgj6PdWO1turxXOjCoLjOLbtRRRY=",
-                        set: (v) => v == "" ? "https://media.istockphoto.com/id/1028621094/photo/service-bell-on-hotel-reception-desk.jpg?s=2048x2048&w=is&k=20&c=-YJfkchCeNBeSOyAgj6PdWO1turxXOjCoLjOLbtRRRY=" : v
-                }
+               url : String,
+               filename: String
         },
         price: Number,
         location: String,
@@ -22,10 +19,26 @@ const listingSchema = new schema({
         review : [
                 {
                         type : schema.Types.ObjectId,
-                        ref : "review"
+                        ref : "Review"
                 }
-        ]
+        ],
+        owner : {
+                type : schema.Types.ObjectId, 
+                ref : "User"
+        },
+        geometry: {
+                type: {
+                  type: String, // Don't do `{ location: { type: String } }`
+                  enum: ['Point'], // 'location.type' must be 'Point'
+                  required: true
+                },
+                coordinates: {
+                  type: [Number],
+                  required: true
+                }
+              }
 })
+
 
 const listing = mongoose.model("listing", listingSchema);
 

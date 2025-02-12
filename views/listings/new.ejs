@@ -2,8 +2,8 @@
 <body class="new-listing">
 
     <div class="container">
-        <h1 class="n-f-h1">Create a New Listing</h1>
-        <form action="/listings" method="POST" class="needs-validation" novalidate>
+        <h1 class="n-f-h1">Add a New Location</h1>
+        <form action="/listings" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" name="listing[title]" id="title" required>
@@ -34,9 +34,10 @@
                 <div class="invalid-feedback">Please provide a country.</div>
             </div>
 
+            
             <div class="mb-3">
-                <label for="image" class="form-label">Image URL</label>
-                <input type="text" class="form-control" name="listing[image][url]" id="image">
+                <label for="image" class="form-label">Uplode Image</label>
+                <input type="file" class="form-control" name="listing[image][url]" id="image">
                 <div class="invalid-feedback">Please provide a valid URL.</div>
             </div>
 

@@ -1,17 +1,46 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const Listing = require("./models/listing");
-const Review = require("./models/review");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js").default;
-const ExpressError = require("./utils/expressError.js");
 const { default: expressError } = require("./utils/expressError.js");
-const { listingSchema, reviewSchema } = require("./schema.js");
+const session = require("express-session");
+const MongoStore = require('connect-mongo');
+const flash = require("connect-flash")
+const passport = require("passport")
+const passportLocal = require("passport-local")
+const user = require("./models/user.js")
+
+
+if (process.env.NODE_ENV != "production") {
+  require('dotenv').config()
+}
+// console.log(process.env.SECRET) 
+
+
+// REQUIRING LISTINGS ALL ROUTES IN app.js FROM [ Routes --> listing.js ] 
+const listingsRouter = require("./Routes/listing.js");
+// REQUIRING REVIEWS ALL ROUTES IN app.js FROM [ Routes --> review.js ] 
+const reviewsRouter = require("./Routes/review.js");
+// REQUIRING USER ALL ROUTES IN app.js FROM [ Routes --> user.js ] 
+const userRouter = require("./Routes/user.js");
+const { error } = require("console");
 
 const app = express();
 let port = 8080;
+
+//--------MONGO DB CONECTION S--------
+const ATLAS_DB_URL = process.env.ATLAS_DB_URL
+
+mongoose.set('strictPopulate', false);
+main()
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect(ATLAS_DB_URL);
+}
+//--------MONGO DB CONECTION E--------
+
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -20,138 +49,72 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
-mongoose.set('strictPopulate', false);
+// --------SESSION CREATION S-------
+const store = MongoStore.create({
+  mongoUrl: ATLAS_DB_URL,
+  crypto: {
+    secret: process.env.SESSION_SECRET
+  },
+  touchAfter: 24 * 3600
 
+})
 
-main()
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+store.on("error", ()=>{
+  console.log("ERROR IN MONGO SESSION STORE")
+})
+
+const sessionOption = {
+  store,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie : {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000 ,
+    maxAge : 7 * 24 * 60 * 60 * 1000,
+    httpOnly : true
+  }
 }
+app.use(session(sessionOption));
+// --------SESSION CREATION E-------
 
-// LISTINGS VALIDATION ON CLIENT SIDE
-const validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  if (error) {
-    console.log("IF START");
-    let errorMsg = error.details.map((el) => el.message).join(", ");
-    console.log("Error Message: " + errorMsg);
-    throw new expressError(400, errorMsg);
-  } else {
-    console.log("ELSE START");
-    next();
-  }
-};
+app.use(flash())
 
-// REVIEWS VALIDATION ON CLIENT SIDE
-const validateReview = (req, res, next) => {
-  let { error } = reviewSchema.validate(req.body);
-  if (error) {
-    console.log("IF START");
-    let errorMsg = error.details.map((el) => el.message).join(", ");
-    // console.log("errmsg " + errorMsg);
-    throw new expressError(400, errorMsg);
-  } else {
-    console.log("ELSE START");
-    next();
-  }
-};
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passportLocal(user.authenticate()));
+passport.serializeUser(user.serializeUser());
+passport.deserializeUser(user.deserializeUser());
+
+// --------LOCALS CREATION S-------
+app.use((req, res, next)=>{
+  res.locals.success = req.flash("Success");
+  res.locals.error = req.flash("error");
+  res.locals.currUser = req.user
+  next();
+})
+// --------LOCALS CREATION E-------
 
 
-
-// INDEX ROUTE
-app.get(
-  "/listings",
-  wrapAsync(async (req, res) => {
-    const listings = await Listing.find({});
-    res.render("listings/index", { listings });
-  })
-);
-
-// (CREATE) NEW ROUTE
-app.get("/listings/new", (req, res) => {
-  res.render("listings/new");
-});
-
-// (CREATE) CREATE ROUTE
-app.post(
-  "/listings",
-  validateListing,
-  wrapAsync(async (req, res, next) => {
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect(`/listings`);
-  })
-);
-
-// (READ) SHOW ROUTE
-app.get(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-  const listingItem = await Listing.findById(req.params.id).populate("reviews");
-
-    res.render("listings/show", { listing: listingItem });
-  })
-);
-
-// (UPDATE) EDIT ROUTE
-app.get(
-  "/listings/:id/edit",
-  wrapAsync(async (req, res) => {
-    let listingItem = await Listing.findById(req.params.id);
-    res.render("listings/edit", { listing: listingItem });
-  })
-);
-
-// (UPDATE) UPDATE ROUTE
-app.put(
-  "/listings/:id",
-  validateListing,
-  wrapAsync(async (req, res) => {
-    // console.log("UPDATED");
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings/${id}`);
-  })
-);
-
-// (DELETE) DELETE ROUTE
-app.delete(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletetlisting = await Listing.findByIdAndDelete(id);
-    // console.log(deletetlisting);
-    res.redirect("/listings");
-  })
-);
-
-// (REVIEWS) REVIEWS ROUTE
-app.post(
-  "/listings/:id/reviews",
-  validateReview,
-  wrapAsync(async (req, res) => {
-    let listing = await Listing.findById(req.params.id);
-    let newReview = new Review(req.body.review);
-    listing.review.push(newReview);
-    await newReview.save();
-    await listing.save();
-    res.redirect(`/listings/${listing.id}`);
-  })
-);
+// LISTINGS ALL ROUTES FORM [ Routes --> listing.js ] TO [ app.js ]
+app.use("/listings", listingsRouter)
+// ---------------------------------------------
+// REVIEWS ALL ROUTES FORM [ Routes --> review.js ] TO [ app.js ]
+app.use("/listings/:id/reviews", reviewsRouter)
+// ---------------------------------------------
+// USER ALL ROUTES FORM [ Routes --> user.js ] TO [ app.js ]
+app.use("/", userRouter)
 
 // HOME ROUTE
 app.get("/", (req, res) => {
-  res.send("Hello Wellcome To Wanderlust!");
+  res.render("home/home.ejs");
 });
+
 
 app.all("*", (req, res, next) => {
   next(new expressError(404, "Page Not Found!"));
 });
 
 app.use((err, req, res, next) => {
-  // console.log(err)
   let { statusCode = 500, message = "SOMETHING WENT WRONG!" } = err;
   res.status(statusCode).render("error", { message });
 });

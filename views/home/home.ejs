@@ -1,0 +1,175 @@
+<% layout("/layouts/boilerplate") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet-friendly Rentals</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .search-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+        .form-box {
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            text-align: start;
+        }
+        .form-box h2 {
+            margin-bottom: 10px;
+        }
+        .form-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-btn {
+            background: #e00060;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .listings, .categories, .amenities, .experiences, .local-attractions {
+            margin-top: 40px;
+            width: 80%;
+            text-align: center;
+        }
+        .listings h3, .categories h3, .amenities h3, .experiences h3, .local-attractions h3 {
+            margin-bottom: 20px;
+        }
+        .categories-container, .experiences-container, .local-attractions-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .category, .experience, .attraction {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .amenities-container {
+            display: flex;
+            gap: 15px;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .amenity {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 150px;
+        }
+
+        .category ,
+        .amenity,
+        .experience,
+        .attraction:hover{
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Wanderlust Travel Booking </h1>
+        <br><br>
+        <div class="search-section">
+            <div class="form-box">
+                <h2>Friendly holiday rentals at your <i>Dream Location</i></h2>
+                <p>Find and book unique friendly homes on Wanderlust...</p>
+                <label>Location</label>
+                <input type="text" value="Lonavala" >
+                <label>Check In</label>
+                <input type="date">
+                <label>Check Out</label>
+                <input type="date">
+                <button class="search-btn">Search</button>
+            </div>
+        </div>
+
+        <div class="categories">
+            <h3>Holiday rentals for every style</h3>
+            <div class="categories-container">
+                <div class="category">🏡<br> Cabins</div>
+                <div class="category">🏢<br>  Flats</div>
+                <div class="category">🏠<br>  Houses</div>
+                <div class="category">🏖 <br> Beachfront</div>
+                <div class="category">🌲<br>  Treehouses</div>
+                <div class="category">🏕 <br>  Camping</div>
+                <div class="category">🚐 <br>  RVs</div>
+                <div class="category">🏛 <br>  Historic Homes</div>
+            </div>
+        </div>
+
+        <div class="amenities">
+            <h3>Popular amenities for friendly home rentals</h3>
+            <div class="amenities-container">
+                <div class="amenity">🍽 <br> Kitchen</div>
+                <div class="amenity">📶 <br> Wifi</div>
+                <div class="amenity">🏊 <br> Pool</div>
+                <div class="amenity">🅿 <br> Free parking on premises</div>
+                <div class="amenity">❄ <br> Air conditioning</div>
+                <div class="amenity">🔥 <br> Fireplace</div>
+                <div class="amenity">🛁 <br> Hot tub</div>
+                <div class="amenity">🐕 <br> Pet-friendly</div>
+                <div class="amenity">🧺 <br> Laundry</div>
+            </div>
+        </div>
+
+        <div class="experiences">
+            <h3>Unique Experiences</h3>
+            <div class="experiences-container">
+                <div class="experience">⛰ <br> Mountain Hiking</div>
+                <div class="experience">🚴 <br> Biking Trails</div>
+                <div class="experience">🛶 <br> Kayaking Adventures</div>
+                <div class="experience">🐾 <br> Pet-friendly Parks</div>
+            </div>
+        </div>
+
+        <div class="local-attractions">
+            <h3>Top Attractions</h3>
+            <div class="local-attractions-container">
+                <div class="attraction">🏔 <br> Banff National Park</div>
+                <div class="attraction">🦌 <br> Wildlife Viewing</div>
+                <div class="attraction">🏞 <br> Scenic Lookouts</div>
+                <div class="attraction">🎨 <br> Art Galleries</div>
+            </div>
+        </div>
+        <br><br><br><br>    
+    </div>
+</body>
+</html>
+
