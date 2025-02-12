@@ -1,9 +1,8 @@
 <% layout("/layouts/boilerplate") %>
 
 <script>
-  const MAPTOKEN = "<%= process.env.MAP_TOKEN %>"
-  const listing = <%- JSON.stringify( listing ) %>
-
+  const MAPTOKEN_A = "<%= process.env.MAP_TOKEN %>";
+  const listing = <%- JSON.stringify( listing ) %>;
 </script>
 
 <body class="show-body">
@@ -48,9 +47,6 @@
       <% } %>
 
     </div>
-  
-
-
 
     <div class="review">
       <% if(currUser){ %>

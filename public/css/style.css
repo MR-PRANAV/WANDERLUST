@@ -218,6 +218,10 @@
 
 /* CARDS OF INDEX PAGE */
 
+.explore-page-title-ALL-LOCATION{
+    margin: 0px 0px 0px 10px;
+}
+
 .card {
   padding: 15px;
   border: none !important;
@@ -453,14 +457,11 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 10px 0px 0px 20px;
 }
 
-/* .logout-profile-pg-btn{
-        height: 20px;
-        width:140px ;
-} */
+
 
 /* SHOW PAGE MAP CSS */
 
 #map {
- height: 400px;
+ height: 250px;
  width: 100%;
 }
