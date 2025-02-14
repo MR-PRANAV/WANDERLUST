@@ -3,13 +3,17 @@ const router = express
   .Router
   // {mergeParams : true}
   ();
+
+
 const user = require("../models/user.js");
 const { default: wrapAsync } = require("../utils/wrapAsync");
 const passport = require("passport");
 
 const userController = require("../controller/user.js")
+// const autncontroller = require("./routes/auth.js")
 
 const {saveRedirectUrl} = require("../MW.js")
+const { islogged_in, isOwner, validateListing } = require("../MW.js");
 
 
 router
@@ -40,5 +44,10 @@ router.get("/logout" , userController.logout)
 
 
 router.get("/profile" , userController.UserProfile)
+
+
+
+
+
 
 module.exports = router;

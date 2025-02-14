@@ -447,8 +447,8 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 10px 0px 0px 10px;
 }
 
-.user-info-txt h4 {
-  margin: 35px 0px 0px 20px;
+.user-info-txt h4,a {
+  margin: 15px 0px 0px 20px;
 }
 .user-info-txt p {
   margin: 10px 0px 0px 20px;
@@ -456,6 +456,8 @@ input[type="number"]::-webkit-outer-spin-button {
 .user-info-txt button {
   margin: 10px 0px 0px 20px;
 }
+
+
 
 
 

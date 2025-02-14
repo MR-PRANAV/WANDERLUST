@@ -10,7 +10,7 @@ module.exports.signUpSave = async (req, res) => {
       let { username, email, password } = req.body;
       const newUser = new user({ email, username });
       const registerdUser = await user.register(newUser, password);
-      // console.log(registerdUser);
+      console.log("THIS IS REG USER - " , registerdUser);
       req.login(registerdUser, (err)=>{
         if(err){
           return next(err)

@@ -48,6 +48,8 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+
+
 // --------SESSION CREATION S-------
 const store = MongoStore.create({
   mongoUrl: ATLAS_DB_URL,

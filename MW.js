@@ -42,6 +42,7 @@ module.exports.islogged_in = (req, res, next)=>{
                 req.flash("error" , "You have to be logged in to create listings!")
                 return res.redirect("/login")
               }
+        // console.log("IS LOGGED IN")
         next()
 }
 
