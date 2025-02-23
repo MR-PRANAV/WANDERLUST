@@ -102,6 +102,12 @@
   text-decoration: underline;
 }
 
+.f-info-links{
+  width: 350px;
+  border:1px solid rgba(0, 0, 0, 0);
+  margin: 0px 0px 0px -30px;
+}
+
 /* INDEX.ejs > FILTERS DIV */
 
 .filters {
@@ -115,6 +121,7 @@
   overflow-x: scroll;
   width: 750px;
   scrollbar-width: none;
+  user-select: none;
 }
 
 .filter-a::-webkit-scrollbar {
@@ -466,4 +473,37 @@ input[type="number"]::-webkit-outer-spin-button {
 #map {
  height: 250px;
  width: 100%;
+}
+
+
+.nav-tabs .nav-link {
+  color: #6c757d;
+}
+.nav-tabs .nav-link.active {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+.destination-title {
+  font-weight: bold;
+}
+
+.text-muted:hover{
+    color: #007bff;
+}
+
+.Destinations-Grid{
+    margin: 0px 0px 0px 0px;
+}
+
+.Destinations-Grid-item:hover{
+    background-color: rgb(223, 223, 223) !important;
+  transition: all 0.3s ease-in-out;
+}
+
+
+
+.Destinations-Grid-item .text-muted:hover{
+  text-decoration: underline !important;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
