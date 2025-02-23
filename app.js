@@ -11,11 +11,9 @@ const passport = require("passport")
 const passportLocal = require("passport-local")
 const user = require("./models/user.js")
 
-
 if (process.env.NODE_ENV != "production") {
   require('dotenv').config()
 }
-
 
 // REQUIRING LISTINGS ALL ROUTES IN app.js FROM [ Routes --> listing.js ] 
 const listingsRouter = require("./Routes/listing.js");
@@ -40,15 +38,12 @@ async function main() {
 }
 //--------MONGO DB CONECTION E--------
 
-
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
-
-
 
 // --------SESSION CREATION S-------
 const store = MongoStore.create({
@@ -57,7 +52,6 @@ const store = MongoStore.create({
     secret: process.env.SESSION_SECRET
   },
   touchAfter: 24 * 3600
-
 })
 
 store.on("error", ()=>{
@@ -95,7 +89,6 @@ app.use((req, res, next)=>{
 })
 // --------LOCALS CREATION E-------
 
-
 // LISTINGS ALL ROUTES FORM [ Routes --> listing.js ] TO [ app.js ]
 app.use("/listings", listingsRouter)
 // ---------------------------------------------
@@ -110,7 +103,6 @@ app.get("/", (req, res) => {
   res.render("home/home.ejs");
 });
 
-
 app.all("*", (req, res, next) => {
   next(new expressError(404, "Page Not Found!"));
 });
@@ -123,6 +115,3 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-
-// NAME - PRANAV PATIL
