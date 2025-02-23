@@ -1,12 +1,12 @@
 const { execSync } = require("child_process");
 
 try {
-    // Add all files
+    // Add all modified and new files
     execSync("git add .", { stdio: "inherit" });
 
-    // Commit with a message (you can modify this to accept user input)
+    // Commit changes (using `-a` to include modified files)
     const commitMessage = `"Auto commit on ${new Date().toLocaleString()}"`;
-    execSync(`git commit -m ${commitMessage}`, { stdio: "inherit" });
+    execSync(`git commit -a -m ${commitMessage}`, { stdio: "inherit" });
 
     // Push to the current branch
     execSync("git push", { stdio: "inherit" });
@@ -15,4 +15,3 @@ try {
 } catch (error) {
     console.error("❌ Error executing Git commands:", error.message);
 }
-
