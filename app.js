@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
+
 const ejsMate = require("ejs-mate");
 const { default: expressError } = require("./utils/expressError.js");
 const session = require("express-session");
