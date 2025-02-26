@@ -120,12 +120,22 @@
   display: flex;
   overflow-x: scroll;
   width: 750px;
-  scrollbar-width: none;
+  scrollbar-width: 10px;
   user-select: none;
 }
 
 .filter-a::-webkit-scrollbar {
-  display: none;
+  height: 7px;
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  border: 1px solid #cacaca;
+  margin: -10px 0px 0px 0px ;
+}
+
+
+.filter-a::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #4b4b4b;
 }
 
 .filter {
