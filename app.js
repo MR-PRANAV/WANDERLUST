@@ -36,6 +36,7 @@ main()
   .catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(ATLAS_DB_URL);
+  
 }
 //--------MONGO DB CONECTION E--------
 
