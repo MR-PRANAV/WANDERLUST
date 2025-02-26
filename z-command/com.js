@@ -9,7 +9,7 @@ try {
 
     if (statusOutput) {
         // Commit changes
-        const commitMessage = `"Auto commit on ${new Date().toLocaleString()} name added"`;
+        const commitMessage = `"Auto commit on ${new Date().toLocaleString()}"`;
         execSync(`git commit -a -m ${commitMessage}`, { stdio: "inherit" });
         console.log("✅ Changes committed successfully!");
     } else {
