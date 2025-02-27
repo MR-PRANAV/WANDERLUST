@@ -1,3 +1,10 @@
 .env
 node_modules/
 Z-ALL-ACCOUNT-DATA.txt
+z-command/com.js.env
+node_modules/
+Z-ALL-ACCOUNT-DATA.txt
+z-command/com.js
+*.log
+*.tmp
+*.DS_Store

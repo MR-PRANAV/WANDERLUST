@@ -3,54 +3,59 @@
   <br />
 
   <div class="filters">
+
+    <div class="filter-close" onclick="closefilters()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+
     <div class="filter-a">
       <!-- #1 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Trending')" data-filter="Trending">
         <div><i class="fa-solid fa-fire"></i></div>
         <p>Trending</p>
       </div>
       <!-- #2 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Rooms')" data-filter="Rooms">
         <div><i class="fa-solid fa-bed"></i></div>
         <p>Rooms</p>
       </div>
       <!-- #3 -->
-      <div class="filter">
+      <div class="filter"onclick="applyfilters('Iconic')" data-filter="Iconic">
         <div><i class="fa-solid fa-mountain-city"></i></div>
         <p>Iconic</p>
       </div>
       <!-- #4 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Mountain')" data-filter="Mountain">
         <div><i class="fa-solid fa-mountain-sun"></i></div>
         <p>Mountain</p>
       </div>
       <!-- #5 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Castles')" data-filter="Castles">
         <div><i class="fa-brands fa-fort-awesome"></i></div>
         <p>Castles</p>
       </div>
       <!-- #6 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Pools')" data-filter="Pools">
         <div><i class="fa-solid fa-person-swimming"></i></div>
         <p>Pools</p>
       </div>
       <!-- #7 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Camping')" data-filter="Camping">
         <div><i class="fa-solid fa-campground"></i></div>
         <p>Camping</p>
       </div>
       <!-- #8 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Farms')" data-filter="Farms">
         <div><i class="fa-solid fa-cow"></i></div>
         <p>Farms</p>
       </div>
       <!-- #9 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Hot')" data-filter="Hot">
         <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
+        <p>Hot</p>
       </div>
       <!-- #10 -->
-      <div class="filter">
+      <div class="filter" onclick="applyfilters('Domes')" data-filter="Domes">
         <div><i class="fa-solid fa-landmark-dome"></i></div>
         <p>Domes</p>
       </div>
@@ -112,10 +117,11 @@
   <h6 class="explore-page-title-ALL-LOCATION">ALL LOCATION'S</h6>
   <div class="row row-cols-lg-3 row-cols-lg-2 row-cols-lg-1 mt-1">
     <% for(let LISTING of listings){ %>
-    <div class="card" style="width: 20rem">
+    <div class="card" style="width: 20rem" data-tags="<%= LISTING.category %>">
       <img src="<%= LISTING.image.url %>" class="card-img-top" alt="..." />
       <div class="card-body">
         <h6><%= LISTING.title %></h6>
+        <h6><%= LISTING.tag %></h6>
         <p class="card-text">
           &#8377; <%= LISTING.price.toLocaleString("en-IN") %>-/night
           <i class="taxinfo">
@@ -133,3 +139,32 @@
   </div>
   <br /><br /><br /><br />
 </body>
+
+
+<script>
+const filters = document.querySelectorAll(".filters");
+const listings = document.querySelectorAll(".card");
+const filter_close = document.querySelector(".filter-close");
+
+
+
+          function applyfilters(tagss) {
+                  // console.log(tagss);
+                  for (const listing of listings) {
+                    if(listing.innerHTML.includes(tagss) == true){
+                      listing.style.display = "block";
+                    }else{
+                      listing.style.display = "none";
+                    }
+                  }
+                  filter_close.style.display = "block"
+                }
+          function closefilters(){
+            for (const listing of listings) {
+              listing.style.display = "block";
+            }
+            filter_close.style.display = "none"
+          }
+
+</script>
+  

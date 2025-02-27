@@ -158,6 +158,27 @@
   font-size: 13px;
 }
 
+.active-filter {
+  background-color: #56a8ff57; /* Change background color */
+  color: white; /* Change text color */
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.filter-close{
+  background-color: #ff9f55; /* Change background color */
+  border-radius: 10px;
+  height: fit-content;
+  width: 30px;
+  padding: 3px;
+  margin-top: 10px;
+  cursor: pointer;
+  text-align: center;
+  display: none;
+}
+
+
+
 .fixed-arow {
   height: 60px;
   width: 20px;
@@ -200,7 +221,7 @@
   display: flex;
   align-items: center;
   height: 50px;
-  width: 230px;
+  width: 200px;
   background-color: #888a8e;
   border-radius: 0.8em;
   overflow: hidden;

@@ -27,6 +27,7 @@
       </p>
       <p class="show-all-text">Location: <%= listing.location %></p>
       <p class="show-all-text">Country: <%= listing.country %></p>
+      <p class="show-all-text">Tag: <%= listing.tag %></p>
       <br />
 
       <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
