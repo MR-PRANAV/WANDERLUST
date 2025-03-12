@@ -11,17 +11,11 @@ module.exports.index = async (req, res) => {
   const listings = await Listing.find({});
   res.render("listings/index", { listings });
 };
-
-
-
-
 module.exports.rendernewform =  (req, res) => {
 // prints a current loged-in user data when user has to be logged in only
 // console.log(req.user)
   res.render("listings/new");
-}
-
-
+}  
 module.exports.createListings = async (req, res, next) => {
 
   let loc = `${req.body.listing.location}, ${req.body.listing.country}`

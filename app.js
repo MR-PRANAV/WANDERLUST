@@ -21,8 +21,6 @@ const listingsRouter = require("./Routes/listing.js");
 const reviewsRouter = require("./Routes/review.js");
 // REQUIRING USER ALL ROUTES IN app.js FROM [ Routes --> user.js ] 
 const userRouter = require("./Routes/user.js");
-const { error } = require("console");
-
 
 const app = express();
 let port = 8080;

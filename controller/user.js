@@ -1,4 +1,5 @@
 const user = require("../models/user.js");
+const Listing = require("../models/listing");
 
 module.exports.signUpRender = async (req, res) => {
 res.render("users/signup");
@@ -52,8 +53,17 @@ module.exports.logout = (req, res, next)=>{
         )
       }
 
-module.exports.UserProfile = (req,res)=>{
-  let curr_user = res.locals.currUser
-  res.render("users/profile" , { curr_user });
-}
+module.exports.UserProfile = async (req, res) => {
+  try {
+    let curr_user = res.locals.currUser;
+    // console.log("CUR USER ID", curr_user._id);
+    let curuserlistings = await Listing.find({ owner: curr_user._id });
+    // console.log("CUR USER LISTINGS", curuserlistings);
+    res.render("users/profile", { curr_user, curuserlistings });
+  } catch (error) {
+    console.error("Error fetching user listings:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
 

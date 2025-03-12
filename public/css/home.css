@@ -4,46 +4,45 @@ body {
         margin: 0;
         padding: 0;
     }
+
     .home-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 20px;
     }
-    .search-section {
-        /* background-image: url('other/IMG/homeimg.jpg'); */
-        display: flex;
-        /* justify-content: center; */
+    /* .search-section {
+        width: 80%;
+        height: 550px;
         background: rgb(191, 64, 64);
         border-radius: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 80%;
-        height: 550px;
-    }
+        display: flex;
+    } */
 
     .search-section-img{
-        width: 66.2%;
+        width: auto;
         height: 550px;
-        position: absolute;    
-        z-index: 1;  
-        background-size: cover;  
         border-radius: 20px;
+        z-index: 1;
+        background-size: cover;
+        position: absolute;
     }
-    .form-box {
+    .form-boxa {
         padding: 20px;
         background: #fff;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         margin: 25px 0px 0px 25px;
-        width: 60%;
-        height: 90%;
+        width: 600px;
+        height: 60%;
         text-align: start;
         z-index: 2;
     }
-    .form-box h2 {
+    .form-boxa h2 {
         margin-bottom: 10px;
     }
-    .form-box input {
+    .form-boxa input {
         width: 100%;
         padding: 10px;
         margin: 8px 0;
@@ -69,6 +68,7 @@ body {
     }
     .categories-container, .experiences-container, .local-attractions-container {
         display: flex;
+        flex-wrap: wrap;
         gap: 20px;
         justify-content: space-between;
         text-align: center;

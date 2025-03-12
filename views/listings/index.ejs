@@ -11,7 +11,7 @@
     <div class="filter-a">
       <!-- #1 -->
       <div class="filter" onclick="applyfilters('Trending')" data-filter="Trending">
-        <div><i class="fa-solid fa-fire"></i></div>
+        <div><i class="fa-solid fa-ranking-star"></i></div>
         <p>Trending</p>
       </div>
       <!-- #2 -->
@@ -59,8 +59,9 @@
         <div><i class="fa-solid fa-landmark-dome"></i></div>
         <p>Domes</p>
       </div>
+     
     </div>
-    <div class="fixed-arow">
+    <!-- <div class="fixed-arow">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -71,7 +72,8 @@
           d="M7.293 4.707 14.586 12l-7.293 7.293 1.414 1.414L17.414 12 8.707 3.293 7.293 4.707z"
         />
       </svg>
-    </div>
+    </div> -->
+   
 
     <!-- ----------------------------- -->
 
@@ -91,30 +93,37 @@
 
     <!-- ----------------------------------- -->
 
-    <div class="inputBox_container">
-      <svg
-        class="search_icon"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 48 48"
-        alt="search icon"
-      >
-        <path
-          d="M46.599 46.599a4.498 4.498 0 0 1-6.363 0l-7.941-7.941C29.028 40.749 25.167 42 21 42 9.402 42 0 32.598 0 21S9.402 0 21 0s21 9.402 21 21c0 4.167-1.251 8.028-3.342 11.295l7.941 7.941a4.498 4.498 0 0 1 0 6.363zM21 6C12.717 6 6 12.714 6 21s6.717 15 15 15c8.286 0 15-6.714 15-15S29.286 6 21 6z"
-        ></path>
-      </svg>
-      <input
-        class="inputBox"
-        id="inputBox"
-        type="text"
-        placeholder="Search For Listings"
-      />
+    <div>
+      <div class="inputBox_container">
+        <svg
+          class="search_icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 48 48"
+          alt="search icon"
+        >
+          <path
+            d="M46.599 46.599a4.498 4.498 0 0 1-6.363 0l-7.941-7.941C29.028 40.749 25.167 42 21 42 9.402 42 0 32.598 0 21S9.402 0 21 0s21 9.402 21 21c0 4.167-1.251 8.028-3.342 11.295l7.941 7.941a4.498 4.498 0 0 1 0 6.363zM21 6C12.717 6 6 12.714 6 21s6.717 15 15 15c8.286 0 15-6.714 15-15S29.286 6 21 6z"
+          ></path>
+        </svg>
+        <input
+          class="inputBox inputBox_search"
+          id="inputBox"
+          type="text"
+          placeholder="Search For Listings"
+        />
+        
+      </div>
+      <span class="inputBox-error"></span>
     </div>
-
+    
+    
     <!-- ------------------------------------- -->
   </div>
 
   <br />
-  <h6 class="explore-page-title-ALL-LOCATION">ALL LOCATION'S</h6>
+  <% if (listings) { %>
+    <h6 class="explore-page-title-ALL-LOCATION">ALL LOCATION'S</h6>
+  <% } %>
   <div class="row row-cols-lg-3 row-cols-lg-2 row-cols-lg-1 mt-1">
     <% for(let LISTING of listings){ %>
     <div class="card" style="width: 20rem" data-tags="<%= LISTING.category %>">
@@ -145,8 +154,10 @@
 const filters = document.querySelectorAll(".filters");
 const listings = document.querySelectorAll(".card");
 const filter_close = document.querySelector(".filter-close");
+const inputBox_search = document.querySelector(".inputBox_search");
+const inputBox_error = document.querySelector(".inputBox-error");
 
-
+const explore_page_title = document.querySelector(".explore-page-title-ALL-LOCATION");
 
           function applyfilters(tagss) {
                   // console.log(tagss);
@@ -166,5 +177,45 @@ const filter_close = document.querySelector(".filter-close");
             filter_close.style.display = "none"
           }
 
+// -----------------------------------------------------------
+
+
+        inputBox_search.addEventListener("input", () => {
+  const searchQuery = inputBox_search.value.trim().toLowerCase();
+
+  const validSearchPattern = /^[a-zA-Z\s]+$/;
+  let matchFound = false;
+
+  if (!validSearchPattern.test(searchQuery) && searchQuery !== "") {
+    inputBox_error.style.color = "#ff6e6e";
+    inputBox_error.style.display = "flex"; // Makes sure the error message and icon align 
+    inputBox_error.style.alignItems = "center"; // Centers icon with text
+    inputBox_error.style.margin = "5px 0px 0px 20px";
+
+    inputBox_error.innerHTML = `
+      <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff6e6e" style="margin-right: 5px;">
+        <path d="M2.20164 18.4695L10.1643 4.00506C10.9021 2.66498 13.0979 2.66498 13.8357 4.00506L21.7984 18.4695C22.4443 19.6428 21.4598 21 19.9627 21H4.0373C2.54022 21 1.55571 19.6428 2.20164 18.4695Z" stroke="#ff6e6e" stroke-width="1.94" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M12 9V13" stroke="#ff6e6e" stroke-width="1.94" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M12 17.0195V17" stroke="#ff6e6e" stroke-width="1.94" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Search a valid location</span>
+    `;
+    return;
+  } else {
+    inputBox_error.innerHTML = ""; // Clear error if valid input
+  }
+
+  for (const listing of listings) {
+    const title = listing.querySelector("h6:nth-of-type(1)")?.innerText.toLowerCase() || "";
+
+    
+    if (title.includes(searchQuery)) {
+      listing.style.display = "block";
+      matchFound = true; // Mark match as found
+    } else {
+      listing.style.display = "none";
+    }
+  }
+  explore_page_title.innerText = matchFound ? "ALL LOCATION'S" : "NO RESULT'S AVAILABLE!";
+});
 </script>
-  
