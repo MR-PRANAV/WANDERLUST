@@ -220,7 +220,7 @@
   border: 3px solid rgba(134, 134, 134, 0.563);
   border-radius: 10px;
   padding: 0px 20px 0px 0px;
-  margin: 0px 0px 0px 50px;
+  margin: 0px 0px 0px 30px;
 }
 .form-switch {
   margin: 15px 0px 0px 0px;
@@ -588,12 +588,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border: 1px solid rgba(255, 0, 0, 0);
   margin: 30px 0px 0px 0px;
 }
-.user-info-x-1-main-R-maillsvg{
-  /* margin: 60px 0px 0px 10px; */
-}
-.user-info-x-1-main-R-maill{
-  /* margin: 90px 0px 0px 10px; */
-}
+
 @media (max-width : 992px) {
   .user-info-x-1-main{
     display: grid;

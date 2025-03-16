@@ -20,13 +20,12 @@
       </div>
       <br />
       <p class="show-all-text">Owned by: <%= listing.owner.username %></p>
-      
-      <!-- <p class="show-all-text">cod<%= listing.geometry.coordinates %></p> -->
+
       <p class="show-all-text">
         Price: <b> &#8377; <%= listing.price.toLocaleString("en-IN") %></b>
       </p>
-      <p class="show-all-text">Location: <%= listing.location %></p>
-      <p class="show-all-text">Country: <%= listing.country %></p>
+      <p class="show-all-text">Location: <%= listing.location %>, <%= listing.country %></p>
+      <!-- <p class="show-all-text">Country: <%= listing.country %></p> -->
       <p class="show-all-text">Tag: <%= listing.tag %></p>
       <br />
 
