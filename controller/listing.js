@@ -11,6 +11,8 @@ module.exports.index = async (req, res) => {
 };
 module.exports.rendernewform =  (req, res) => {
 // prints a current loged-in user data when user has to be logged in only
+
+
 // console.log(req.user)
   res.render("listings/new");
 }  

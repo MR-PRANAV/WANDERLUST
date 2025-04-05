@@ -551,6 +551,12 @@ input[type="number"]::-webkit-outer-spin-button {
   background-color: #ff5900c7;
   border-radius: 10px;
 }
+
+.user-info-x-1-title{
+  color: white;
+  margin: 20px 0px 0px 40px;
+}
+
 .user-info-x-1-main{
   height: 200px;
   width: 100%;
