@@ -5,6 +5,9 @@ module.exports.signUpRender = async (req, res) => {
 res.render("users/signup");
 }
 
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+
 module.exports.signUpSave = async (req, res) => {
     try {
       let { username, email, password } = req.body;
@@ -75,3 +78,123 @@ module.exports.Userprofile = async (req, res) => {
 }
 
 
+module.exports.forgotpassword_forgot_get = async (req, res) => {
+  res.render('users/forgot.ejs'); // render a form with email input
+}
+
+
+module.exports.forgotpassword_forgot_post = async (req, res) => {
+    // console.log("TOKEN GEN STARTED");
+
+    try {
+        const token = crypto.randomBytes(20).toString('hex');
+        // Use the correct reference to the User model
+        const userwanttoforgotpassword = await user.findOne({ email: req.body.email });
+        // console.log( "USER by body" ,  req.body.email)
+        // console.log( "USER from db" ,  userwanttoforgotpassword)
+ 
+        if (!userwanttoforgotpassword) {
+            req.flash('error', 'No account with that email address exists.');
+            return res.redirect('/forgot');
+        }
+
+        userwanttoforgotpassword.resetPasswordToken = token;
+        userwanttoforgotpassword.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+        
+        await userwanttoforgotpassword.save();
+
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS,
+            },
+        });
+        const mailOptions = {
+            
+            to: userwanttoforgotpassword.email, // username is email in your case
+            from: 'yourproject@support.com',
+            subject: 'Password Reset',
+            text: `
+                You are receiving this because you have requested the reset of the password for your WanderLust account.\n\n
+                Please click on the following link to complete the process:\n\n
+                http://${req.headers.host}/reset/${token}\n\n
+                If you did not request this, please ignore this email and your password will remain unchanged OR safe at only your side.\n`,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        req.flash('info', 'An e-mail has been sent to ' + userwanttoforgotpassword.email + ' with further instructions.');
+        res.redirect('/forgot');
+
+        // console.log("TOKEN GEN COMPLETED");
+    } catch (err) {
+        console.error(err);
+        res.redirect('/forgot');
+    }
+}
+
+
+module.exports.forgotpassword_resettoken_get = async (req, res) => {
+  // console.log("RESET TOKEN CHECK STARTED for new password endpoint");
+  try {
+    const userwanttoforgotpassword = await user.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!userwanttoforgotpassword) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('/forgot');
+    }
+
+    res.render('users/reset.ejs', { token: req.params.token });
+    // console.log("RESET TOKEN CHECK ended for new password endpoint");
+  } catch (err) {
+    console.error(err);
+    res.redirect('/forgot');
+  }
+}
+
+module.exports.forgotpassword_resettoken_post = async (req, res) => {
+  console.log( "TOKEN IS - ", req.params.token)
+
+  try {
+    // console.log("psaaword update started");
+    const userwanttoforgotpassword = await user.findOne({
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    // console.log("psaaword update started is avalable ro not" );
+    if (!userwanttoforgotpassword) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('back');
+    }
+
+    // console.log("psaaword update started is equla or not" );
+    if (req.body.password !== req.body.confirm) {
+      req.flash('error', 'Passwords do not match.');
+      return res.redirect('back');
+    }
+
+    // console.log("psaaword update started is seting a pass" );
+    await userwanttoforgotpassword.setPassword(req.body.password); // from passport-local-mongoose
+    userwanttoforgotpassword.resetPasswordToken = undefined;
+    userwanttoforgotpassword.resetPasswordExpires = undefined;
+
+    // console.log("psaaword update started is saving" );
+    await userwanttoforgotpassword.save();
+
+    // console.log("psaaword update relogining " );
+    req.login(userwanttoforgotpassword, err => {
+      if (err) return next(err);
+      req.flash('success', 'Your password has been changed.');
+      res.redirect('/'); // or wherever
+    });
+    // console.log("psaaword update ended " );
+  } catch (err) {
+    console.error(err);
+    res.redirect('back');
+  }
+}
