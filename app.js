@@ -8,13 +8,11 @@ const session = require("express-session");
 const MongoStore = require('connect-mongo');
 const flash = require("connect-flash")
 const passport = require("passport")
-const passportLocal = require("passport-local")
-const user = require("./models/user.js")
-
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 if (process.env.NODE_ENV != "production") {
   require('dotenv').config()
 }
-
 // REQUIRING LISTINGS ALL ROUTES IN app.js FROM [ Routes --> listing.js ] 
 const listingsRouter = require("./Routes/listing.js");
 // REQUIRING REVIEWS ALL ROUTES IN app.js FROM [ Routes --> review.js ] 
@@ -27,7 +25,6 @@ let port = 8080;
 
 //--------MONGO DB CONECTION S--------
 const ATLAS_DB_URL = process.env.ATLAS_DB_URL
-
 mongoose.set('strictPopulate', false);
 main()
   .then(() => console.log("MongoDB Connected"))
@@ -76,9 +73,11 @@ app.use(flash())
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new passportLocal(user.authenticate()));
-passport.serializeUser(user.serializeUser());
-passport.deserializeUser(user.deserializeUser());
+
+// Passport configuration
+passport.use(new LocalStrategy(User.authenticate())); // Fix: Use User.authenticate() provided by passport-local-mongoose
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // --------LOCALS CREATION S-------
 app.use((req, res, next)=>{
@@ -98,6 +97,7 @@ app.use("/listings/:id/reviews", reviewsRouter)
 // USER ALL ROUTES FORM [ Routes --> user.js ] TO [ app.js ]
 app.use("/", userRouter)
 
+
 // HOME ROUTE
 app.get("/", (req, res) => {
   res.render("home/home.ejs");
@@ -115,3 +115,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+

@@ -5,7 +5,6 @@ module.exports.signUpRender = async (req, res) => {
 res.render("users/signup");
 }
 
-
 module.exports.signUpSave = async (req, res) => {
     try {
       let { username, email, password } = req.body;
@@ -25,12 +24,9 @@ module.exports.signUpSave = async (req, res) => {
     }
   }
 
-
-
 module.exports.loginRender = async (req, res) => {
 res.render("users/login");
 }
-
 
 module.exports.loginsave = async (req, res) => {
       let { username, password } = req.body;
@@ -38,7 +34,6 @@ module.exports.loginsave = async (req, res) => {
       let redirectUrl = res.locals.redirectUrl || "/listings";
       res.redirect(redirectUrl)
 }
-
 
 module.exports.logout = (req, res, next)=>{
         req.logout(
@@ -53,7 +48,7 @@ module.exports.logout = (req, res, next)=>{
         )
       }
 
-module.exports.UserProfile = async (req, res) => {
+module.exports.Profile = async (req, res) => {
   try {
     let curr_user = res.locals.currUser;
     // console.log("CUR USER ID", curr_user._id);
@@ -65,5 +60,18 @@ module.exports.UserProfile = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+module.exports.allUser = async (req, res) => {
+  let curr_user = res.locals.currUser;
+  let allusers = await user.find({});
+  res.render("users/allusers", { allusers, curr_user });
+}
+
+module.exports.Userprofile = async (req, res) => {
+  let { id } = req.params;
+  let userprofile = await user.findById(id);
+  let curuserlistings = await Listing.find({ owner: id });
+  res.render("users/userprofile", { userprofile, curuserlistings  });
+}
 
 

@@ -105,9 +105,17 @@
       </div>
     </div>
   </div>
+
+
+        <% if (curuserlistings.length != 0 ) { %>
+            <h5 class="user-info-x-2-title">Location Owned by @<%= curr_user.username %> #<%= curuserlistings.length %> Location </h5>
+        <% }else{ %>
+            <h5 class="user-info-x-2-title">Thare is no location Owned by @<%= curr_user.username %> </h5>
+        <% }%>
+        <br>
   
 
-  <h5 class="user-info-x-2-title">Location Owned by @<%= curr_user.username %> #<%= curuserlistings.length %> Location </h5>
+  
   <div class="user-info-x-2">
     
 
@@ -132,6 +140,8 @@
   </div>
 
 
+
 </div>
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 
 <script src="/js/Profile.js"></script>

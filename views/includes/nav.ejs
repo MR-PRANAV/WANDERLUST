@@ -12,6 +12,12 @@
         <a class="nav-link" href="/"><b>Wanderlust</b></a>
         <a class="nav-link" href="/listings">Explore</a>
         <a class="nav-link" href="/listings/new">Add New Location</a>
+
+        <% if (currUser) { %>
+          <a class="nav-link" href="/user">Find Yours host</a>
+        <% } %>  
+       
+
       </div>
       <!-- <div class="navbar-nav ms-auto">
        

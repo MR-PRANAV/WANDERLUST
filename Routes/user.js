@@ -43,11 +43,13 @@ router
 router.get("/logout" , userController.logout)
 
 
-router.get("/profile" , userController.UserProfile)
+router.get("/profile" , userController.Profile)
 
+router.get("/user" ,  userController.allUser)
 
+router.get("/userprofile/:id" , islogged_in,  userController.Userprofile)
 
-
+  
 
 
 module.exports = router;

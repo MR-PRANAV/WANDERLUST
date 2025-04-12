@@ -1,13 +1,10 @@
 <% layout("/layouts/boilerplate") %>
 
-
 <body class="HOME-BODY">
   
     <div class="home-container">
         <h1> Wanderlust Travel Booking </h1>
        
-     
-
             <img class="search-section-img" src="other\IMG\homeimg.jpg" alt="sdsds">
             <div class="form-boxa">
                 <h2>Friendly holiday rentals at your <br><i>Dream Location</i></h2>
@@ -20,8 +17,6 @@
                 </a>
             </div>
 
-       
-       
 <br><br><br><br><br><br><br><br>
 
         <div class="home-intro">
@@ -36,11 +31,15 @@
             <p>Start your journey with Wanderlust today!</p>
             <p>Happy travels!</p>
         </div>
-
-        <div class="home-owner-search">
-            <h2>Looking for a place to stay? <br>Book with confidence at your trusted host</h2>
-            
-        </div>
+        <% if (currUser) { %>
+            <div class="home-owner-search home-intro">
+                <h2>Looking for a place to stay at a friendly host? <br>Book with confidence at your trusted host</h2>
+                <a class="nav-link" href="/user">
+                    <button  class="search-btn">Find Yours host</button>
+                </a>
+            </div>
+          <% } %>  
+        
 
         <div class="categories">
             <h3>Holiday rentals for every style</h3>
