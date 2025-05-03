@@ -1,14 +1,17 @@
-const { required } = require("joi");
 const mongoose = require("mongoose");
-const schema = mongoose.Schema;
-const PassportLocalMongoose = require("passport-local-mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
-const userSchema = new schema({
-        email: { type: String, required: true },
-        resetPasswordToken: { type: String  },
-        resetPasswordExpires: { type: Date },
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
+  isAdmin: { type: Boolean, default: false },
+  profilePhoto: {
+    url: String, // URL of the uploaded photo
+    filename: String, // Filename in Cloudinary
+  },
 });
 
-userSchema.plugin(PassportLocalMongoose);
+userSchema.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", userSchema);

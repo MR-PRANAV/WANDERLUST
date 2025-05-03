@@ -22,9 +22,12 @@
       
         <p class="show-all-text">Owned by:-
           <%= listing.owner.username %>
+
+          <% if( !(currUser.username == listing.owner.username) ){ %>
           <a href="/userprofile/<%= listing.owner._id %>" >
             <button type="button" class="btn btn-primary show-e-btn">View Profile</button>
           </a>
+          <% } %>
         </p>
 
       <p class="show-all-text">

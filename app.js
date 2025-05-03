@@ -86,6 +86,11 @@ app.use((req, res, next)=>{
   res.locals.currUser = req.user
   next();
 })
+
+app.use((req, res, next) => {
+  res.locals.curr_user = req.user; // `req.user` is set by Passport.js after authentication
+  next();
+});
 // --------LOCALS CREATION E-------
 
 // LISTINGS ALL ROUTES FORM [ Routes --> listing.js ] TO [ app.js ]

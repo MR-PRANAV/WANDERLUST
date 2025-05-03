@@ -5,7 +5,10 @@ const router = express
   ();
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-
+const multer = require('multer');
+const { storage , cloudinary } = require("../cloudConfig.js")
+const upload = multer({ storage });
+// const { cloudinary } = require('../utils/cloudinary');
 
 const user = require("../models/user");
 const { default: wrapAsync } = require("../utils/wrapAsync");
@@ -16,6 +19,8 @@ const userController = require("../controller/user.js")
 
 const {saveRedirectUrl} = require("../MW.js")
 const { islogged_in, isOwner, validateListing } = require("../MW.js");
+
+
 
 
 router
@@ -62,6 +67,10 @@ router.get('/reset/:token', userController.forgotpassword_resettoken_get);
 
 router.post('/reset/:token', userController.forgotpassword_resettoken_post);
 
-
+router.post('/profile/photo',
+            islogged_in,
+            upload.single('profilePhoto'),
+            userController.uploadProfilePhoto
+            );
 
 module.exports = router;

@@ -96,7 +96,7 @@
           class="inputBox inputBox_search"
           id="inputBox"
           type="text"
-          placeholder="Search For Listings"
+          placeholder="Location/name"
         />
         
       </div>
@@ -117,7 +117,8 @@
       <img src="<%= LISTING.image.url %>" class="card-img-top" alt="..." />
       <div class="card-body">
         <h6><%= LISTING.title %></h6>
-        <h6><%= LISTING.tag %></h6>
+        <h6><%= LISTING.tag %> | <%= LISTING.location %></h6>
+        
         <p class="card-text">
           &#8377; <%= LISTING.price.toLocaleString("en-IN") %>-/night
           <i class="taxinfo">
@@ -172,7 +173,7 @@ const explore_page_title = document.querySelector(".explore-page-title-ALL-LOCAT
 // -----------------------------------------------------------
 
 
-        inputBox_search.addEventListener("input", () => {
+  inputBox_search.addEventListener("input", () => {
   const searchQuery = inputBox_search.value.trim().toLowerCase();
 
   const validSearchPattern = /^[a-zA-Z\s]+$/;
@@ -199,9 +200,10 @@ const explore_page_title = document.querySelector(".explore-page-title-ALL-LOCAT
 
   for (const listing of listings) {
     const title = listing.querySelector("h6:nth-of-type(1)")?.innerText.toLowerCase() || "";
+    const location = listing.querySelector("h6:nth-of-type(2)")?.innerText.toLowerCase() || "";
 
-    
-    if (title.includes(searchQuery)) {
+    // Check if the search query matches either the title or the location
+    if (title.includes(searchQuery) || location.includes(searchQuery)) {
       listing.style.display = "block";
       matchFound = true; // Mark match as found
     } else {

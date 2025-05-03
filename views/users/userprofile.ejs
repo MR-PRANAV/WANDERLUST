@@ -1,0 +1,89 @@
+<% layout("/layouts/boilerplate") %>
+
+  <!-- <%= userprofile.email %>
+<%= userprofile.username %>
+<%= userprofile._id %>
+
+<%= curuserlistings %> -->
+
+  <div class="user-info-x">
+    <h3 class="user-info-x-1-title">USER PRIFILE</h3>
+    <div class="user-info-x-1-main">
+      <div class="user-info-x-1-main-L">
+        <div class="user-info-img">
+          <% if (userprofile.profilePhoto && userprofile.profilePhoto.url) { %>
+            <img src="<%= userprofile.profilePhoto.url %>" alt="Profile Photo" class="profile-photo" />
+            <% } else { %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" shape-rendering="geometricPrecision"
+                text-rendering="geometricPrecision" image-rendering="optimizeQuality" clip-rule="evenodd"
+                viewBox="0 0 512 512" hight="180px" width="180px" class="profile-photo-svgg">
+                <path fill="#ffffff90" fill-rule="nonzero"
+                  d="M256 0c68 0 132.89 26.95 180.96 75.04C485.05 122.99 512 188.11 512 256c0 68-26.95 132.89-75.04 180.96-23.49 23.56-51.72 42.58-83.15 55.6C323.59 505.08 290.54 512 256 512c-34.55 0-67.6-6.92-97.83-19.44l-.07-.03c-31.25-12.93-59.42-31.93-83.02-55.54l-.07-.07C26.9 388.82 0 324.03 0 256 0 116.78 112.74 0 256 0zm-52.73 332.87a67.668 67.668 0 01-5.6-6.74c-10.84-14.83-20.55-31.61-30.32-47.22-7.06-10.41-10.78-19.71-10.78-27.14 0-7.95 4.22-17.23 12.64-19.34-1.11-15.99-1.49-31.77-.74-48.88.37-4.08 1.12-8.17 2.23-12.27 4.84-17.1 16.73-30.86 31.61-40.15 5.2-3.35 10.78-5.94 17.1-8.18 10.78-4.09 5.57-20.45 17.48-20.82 27.88-.74 73.61 23.06 91.46 42.38 10.41 11.16 17.1 26.03 18.22 45.74l-1.12 44.03c5.2 1.49 8.55 4.84 10.04 10.04 1.49 5.95 0 14.13-5.2 25.67 0 .36-.38.36-.38.74-11.47 18.91-23.39 40.77-36.57 58.33-6.63 8.83-12.07 7.26-6.42 15.74 26.88 36.96 79.9 31.82 112.61 56.44 35.73-40.16 55.15-91.48 55.15-145.24 0-58.34-22.8-113.35-64.07-154.61v-.08C369.44 60.1 314.23 37.32 256 37.32 134.4 37.32 37.32 135.83 37.32 256c0 53.85 19.41 105.03 55.15 145.24 32.72-24.62 85.73-19.48 112.61-56.44 4.68-7.01 3.48-6.33-1.81-11.93z" />
+              </svg>
+              <div class="profile-photo-svgg-alingment-box"></div>
+
+              <% } %>
+        </div>
+      </div>
+      <div class="user-info-x-1-main-R">
+        <br />
+        <h2>@<%= userprofile.username %>
+        </h2>
+        <div class="user-info-x-1-main-R-m" style="margin-top: 70px !important ">
+          <svg fill="#ffffff" class="user-info-x-1-main-R-maillsvg" version="1.1" id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="25"
+            height="25" viewBox="0 0 122.88 92.12" style="enable-background: new 0 0 122.88 92.12" xml:space="preserve">
+            <g>
+              <path class="st4" d="M8.36,92.12h19.54V44.67L0,23.76v60.08C0,88.42,3.78,92.12,8.36,92.12L8.36,92.12z" />
+              <path class="st3" d="M94.97,92.12h19.54c4.67,0,8.36-3.78,8.36-8.36v-60L94.97,44.67V92.12L94.97,92.12z" />
+              <path class="st2"
+                d="M94.97,8.4v36.27l27.91-20.91V12.58c0-10.37-11.82-16.25-20.11-10.05L94.97,8.4L94.97,8.4z" />
+              <polygon class="st0"
+                points="27.9,44.67 27.9,8.4 61.44,33.57 94.97,8.4 94.97,44.67 61.44,69.76 27.9,44.67" />
+              <path class="st1" d="M0,12.58v11.18l27.91,20.91V8.4l-7.8-5.87C11.82-3.66,0,2.29,0,12.58L0,12.58z" />
+            </g>
+          </svg>
+          -
+          <i class="user-info-x-1-main-R-maill">
+            <b>
+              <%= userprofile.email %>
+            </b>
+          </i>
+        </div>
+      </div>
+    </div>
+
+    <% if (curuserlistings.length !=0 ) { %>
+      <h5 class="user-info-x-2-title">
+        Location Owned by @<%= userprofile.username %> #<%= curuserlistings.length %> Location
+      </h5>
+      <% }else{ %>
+        <h5 class="user-info-x-2-title">
+          Thare is no location Owned by @<%= userprofile.username %>
+        </h5>
+        <% }%>
+          <br />
+          <div class="user-info-x-2">
+            <div class="row row-cols-lg-3 row-cols-lg-2 row-cols-lg-1 mt-1">
+              <% for(let LISTING of curuserlistings){ %>
+                <div class="card" style="width: 25rem" data-tags="<%= LISTING.category %>">
+                  <img src="<%= LISTING.image.url %>" class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h6>
+                      <%= LISTING.title %>
+                    </h6>
+                    <h6>
+                      <%= LISTING.tag %>
+                    </h6>
+                    <br />
+                    <a href="/listings/<%= LISTING.id %>">
+                      <button type="button" class="btn btn-info more-info-btn">
+                        More Info
+                      </button>
+                    </a>
+                  </div>
+                </div>
+                <% } %>
+            </div>
+          </div>
+  </div>

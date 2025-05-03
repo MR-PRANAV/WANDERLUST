@@ -1,6 +1,6 @@
 <% layout("/layouts/boilerplate") %>
 
-<div class="row mt-3">
+        <!-- <div class="row mt-3">
         <div class="col-6 offset-3">
                 <h4>Log In</h4>
                 <br>
@@ -17,8 +17,94 @@
                                         <p>Forgot Password?</p>
                                 </a>
                         </div>
-                        <button class="btn btn-success">LogIn</button>
+                        <button class="btn btn-success" style="background-color:rgba(255, 110, 43, 0.9) ;">LogIn</button>
                 </form>
+                <a class="nav-link" href="/signup" style="margin:20px 0px 0px -10px">
+                        dont have an account! <b style="color: rgba(255, 129, 70, 0.69);">Create an account</b> 
+                </a>
                 <br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
-</div>
+</div> -->
+        <div class="row mt-3">
+                <div class="col-6 offset-3">
+                        <h4>Log In</h4>
+                        <br>
+                        <form id="loginForm" action="/login" method="post">
+                                <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" name="username" id="username" />
+                                        <small class="text-danger" id="usernameError"></small>
+                                </div>
+                               
+                                <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" />
+                                        <small class="text-danger" id="passwordError"></small>
+                                        <a href="/forgot" style="color: black;">
+                                                <p>Forgot Password?</p>
+                                        </a>
+                                       
+                                </div>
+                                <button class="btn btn-success" type="submit"
+                                        style="background-color: rgba(255, 110, 43, 0.9);">
+                                        LogIn
+                                </button>
+                        </form>
+
+                        <a class="nav-link" href="/signup" style="margin: 20px 0px 0px -10px">
+                                don't have an account!
+                                <b style="color: rgba(255, 129, 70, 0.69);">Create an account</b>
+                        </a>
+
+                        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                </div>
+        </div>
+
+        <style>
+                .is-invalid {
+                        border-color: red;
+                        background-color: #ffe6e6;
+                }
+
+                .text-danger {
+                        font-size: 0.9em;
+                }
+        </style>
+
+        <script>
+                document.getElementById("loginForm").addEventListener("submit", function (e) {
+                        let isValid = true;
+
+                        const username = document.getElementById("username");
+                        const password = document.getElementById("password");
+
+                        const usernameError = document.getElementById("usernameError");
+                        const passwordError = document.getElementById("passwordError");
+
+                        // Reset messages and styles
+                        usernameError.innerText = "";
+                        passwordError.innerText = "";
+
+                        username.classList.remove("is-invalid");
+                        password.classList.remove("is-invalid");
+
+                        // Username required check
+                        if (username.value.trim() === "") {
+                                usernameError.innerText = "Username is required.";
+                                username.classList.add("is-invalid");
+                                isValid = false;
+                        }
+
+                        // Password required check
+                        if (password.value.trim() === "") {
+                                passwordError.innerText = "Password is required.";
+                                password.classList.add("is-invalid");
+                                isValid = false;
+                        }
+
+                        // Stop form submission if invalid
+                        if (!isValid) {
+                                e.preventDefault();
+                        }
+                });
+        </script>

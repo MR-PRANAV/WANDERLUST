@@ -38,17 +38,15 @@ module.exports.loginsave = async (req, res) => {
       res.redirect(redirectUrl)
 }
 
-module.exports.logout = (req, res, next)=>{
-        req.logout(
-          (err)=>{
-            if(err){
-             return next(err)
+module.exports.logout =  async (req, res, next)=>{
+        req.logout((err) => {
+            if (err) {
+                return next(err);
             }
-            req.flash("Success" , "You logged-out!")
-            // res.redirect("/listings")
-            res.render("home/home.ejs")
-          }
-        )
+            req.flash("Success", "You logged-out!");
+            res.render("home/home.ejs");
+        });
+     
       }
 
 module.exports.Profile = async (req, res) => {
@@ -77,11 +75,9 @@ module.exports.Userprofile = async (req, res) => {
   res.render("users/userprofile", { userprofile, curuserlistings  });
 }
 
-
 module.exports.forgotpassword_forgot_get = async (req, res) => {
   res.render('users/forgot.ejs'); // render a form with email input
 }
-
 
 module.exports.forgotpassword_forgot_post = async (req, res) => {
     // console.log("TOKEN GEN STARTED");
@@ -196,5 +192,34 @@ module.exports.forgotpassword_resettoken_post = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.redirect('back');
+  }
+}
+
+module.exports.uploadProfilePhoto = async (req, res) => {
+  try {
+    const userphoto = await user.findById(req.user._id);
+    if (!userphoto) {
+      req.flash('error', 'User not found.');
+      return res.redirect('/profile');
+    }
+
+    // Delete the old profile photo from Cloudinary if it exists
+    if (userphoto.profilePhoto && userphoto.profilePhoto.filename) {
+      await cloudinary.uploader.destroy(userphoto.profilePhoto.filename);
+    }
+
+    // Update the user's profile photo
+    userphoto.profilePhoto = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+    await userphoto.save();
+
+    req.flash('success', 'Profile photo updated successfully!');
+    res.redirect('/profile');
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Something went wrong. Please try again.');
+    res.redirect('/profile');
   }
 }

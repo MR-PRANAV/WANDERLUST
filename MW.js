@@ -3,8 +3,6 @@ const Review = require("./models/review");
 const ExpressError = require("./utils/expressError.js");
 const { listingSchema, reviewSchema  } = require("./schema.js");
 
-
-
 // LISTINGS VALIDATION MW ON CLIENT SIDE
 module.exports.validateListing = (req, res, next) => {
         let { error } = listingSchema.validate(req.body);
