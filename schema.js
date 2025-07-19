@@ -1,4 +1,3 @@
-
 const Joi = require('joi');
 
 module.exports.listingSchema = Joi.object({
@@ -12,6 +11,7 @@ module.exports.listingSchema = Joi.object({
         image: Joi.object({
             url: Joi.string().uri().optional(), 
         }).optional(),
+        capacity: Joi.number().min(1).required()
     }).required()
 });
 

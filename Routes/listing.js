@@ -61,7 +61,30 @@ router.get(
   wrapAsync(listingController.editAListing)
 );
 
+// SEARCH ROUTE
+router.get('/search', async (req, res) => {
+  const { location, checkIn, checkOut, people } = req.query;
 
+  // Find listings in location with enough capacity
+  let listings = await Listing.find({
+    location: { $regex: new RegExp(location, 'i') },
+    capacity: { $gte: people }
+  });
 
+  // Filter out listings that are already booked for those dates
+  const availableListings = [];
+  for (let listing of listings) {
+    const overlapping = await Booking.findOne({
+      listing: listing._id,
+      status: { $in: ['pending', 'confirmed'] },
+      $or: [
+        { checkIn: { $lt: new Date(checkOut) }, checkOut: { $gt: new Date(checkIn) } }
+      ]
+    });
+    if (!overlapping) availableListings.push(listing);
+  }
+
+  res.render('listings/index', { listings: availableListings });
+});
 
 module.exports = router;

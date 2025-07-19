@@ -29,11 +29,20 @@ module.exports.createListings = async (req, res, next) => {
   let url = req.file.path;
   let filename = req.file.filename;
 
-  const newListing = new Listing(req.body.listing);
-  // console.log(req.user)
-  newListing.owner = req.user._id;
-  newListing.image = { url, filename };
-  newListing.geometry = resp.body.features[0].geometry;
+  const { title, description, price, location, country, tag, capacity } = req.body.listing;
+
+  const newListing = new Listing({
+    title,
+    description,
+    price,
+    location,
+    country,
+    tag,
+    capacity,
+    owner: req.user._id,
+    image: { url, filename },
+    geometry: resp.body.features[0].geometry,
+  });
   let sl = await newListing.save();
   // console.log(sl)
   req.flash("Success", "New Listing Created");
@@ -46,6 +55,12 @@ module.exports.showAllListings = async (req, res) => {
   const listingItem = await Listing.findById(req.params.id)
     .populate("reviews")
     .populate("owner");
+
+  const bookingdata = req.query.bookingdata ? JSON.parse(req.query.bookingdata) : null;
+
+  // console.log("Booking Data:", bookingdata);
+
+    // console.log("Listing Item:", listingItem);
   const rearr = [];
   for await (const ele of listingItem.review) {
     let re = await Review.findById(ele);
@@ -63,7 +78,7 @@ module.exports.showAllListings = async (req, res) => {
     req.flash("error", "Listing Dose Not Exist");
     res.redirect("/listings");
   }
-  res.render("listings/show", { listing: listingItem, reviews: rearr , curr_user});
+  res.render("listings/show", { listing: listingItem, reviews: rearr , curr_user , bookingdata});
 };
 
 module.exports.editAListing = async (req, res) => {
@@ -88,6 +103,7 @@ module.exports.updateAListing = async (req, res) => {
     list.image = { url, filename };
     await list.save();
   }
+  list.capacity = req.body.listing.capacity;
 
   req.flash("Success", "Listing Updated!");
   res.redirect(`/listings/${id}`);

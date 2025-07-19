@@ -37,6 +37,11 @@ const listingSchema = new schema({
                   type: [Number],
                   required: true
                 }
+              },
+        capacity: {
+                type: Number,
+                required: true,
+                min: 1
               }
 })
 

@@ -1,0 +1,285 @@
+<% layout("/layouts/boilerplate") %>
+
+    <body>
+        <div class="bookings-container">
+            <h1 class="text-center">Book Your Stay</h1>
+            <p> booking data <%= JSON.stringify(bookingdata) %>
+                output booking data {"location":"bhusawal","people":"3","checkIn":"2025-08-01","checkOut":"2025-08-02"}
+            </p>
+
+            <div class="booking-form">
+                <form action="/bookings/<%= listing._id %>" method="POST" id="bookingForm"
+                    onsubmit="return validateBookingForm()" novalidate>
+                    <p><strong>Details of the location you are booking:</strong></p>
+                    <!-- Listing ID -->
+            </div>
+
+            <!-- Listing Info -->
+            <div class="listing-details"
+                style="display: flex; flex-wrap: wrap; gap: 20px; background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(51, 51, 51, 0.664);">
+                <!-- <div class="form-group">  -->
+                <label for="listingId">Location ID:</label>
+                <input type="text" id="listingId" name="listingId" value="<%= listing._id %>" readonly>
+                <!-- </div> -->
+                <div style="flex: 1 1 220px;"><strong>Title:</strong>
+                    <div>
+                        <%= listing.title %>
+                    </div>
+                </div>
+                <div style="flex: 1 1 180px;"><strong>Price/Night:</strong>
+                    <div style="color: #28a745; font-weight: bold;">₹<%= listing.price %>
+                    </div>
+                </div>
+                <div style="flex: 1 1 180px;"><strong>Location:</strong>
+                    <div>
+                        <%= listing.location %>
+                    </div>
+                </div>
+                <div style="flex: 1 1 160px;"><strong>Category:</strong>
+                    <div>
+                        <%= listing.tag %>
+                    </div>
+                </div>
+                <div style="flex: 1 1 160px;"><strong>Capacity:</strong>
+                    <div>
+                        <%= listing.capacity %> people
+                    </div>
+                </div>
+                <div style="flex: 1 1 160px;"><strong>Owner:</strong>
+                    <div>
+                        <%= listing.owner.username %>
+                    </div>
+                </div>
+                <div style="flex-basis: 100%; margin-top: 10px;"><strong>Description:</strong>
+                    <div style="background: #fff; border-radius: 6px; padding: 10px; border: 1px solid #e9ecef;">
+                        <%= listing.description %>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Booking Section -->
+            <p><strong>Booking Details:</strong></p>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Booking by:</label>
+                <input type="email" class="form-control" id="email" name="email" value="<%= currUser.email %>" required
+                    readonly style="background-color: #f9f9f9;">
+            </div>
+
+
+            <!-- Dates -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="checkIn" class="form-label">Check-In Date:</label>
+                    <input type="date" class="form-control" id="checkIn" name="checkIn" required
+                        value="<%= bookingdata && bookingdata.checkIn ? bookingdata.checkIn : '' %>">
+                    <div id="checkInError" class="form-text text-danger d-none"></div>
+                </div>
+                <div class="col-md-4">
+                    <label for="checkOut" class="form-label">Check-Out Date:</label>
+                    <input type="date" class="form-control" id="checkOut" name="checkOut" required
+                        value="<%= bookingdata && bookingdata.checkOut ? bookingdata.checkOut : '' %>">
+                    <div id="checkOutError" class="form-text text-danger d-none"></div>
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-end">
+                    <label class="form-label">Total Days:</label>
+                    <div id="totalDaysDisplay" class="fw-semibold">--</div>
+                </div>
+            </div>
+            <small style="color: #ff8383;">Check-in date must be at least 10 days from today (as per the system). 
+                <br>
+                But to book your dream stay, please ensure the check-in date is at least 15 days from today so if someone else holds the property, you won't miss out your dream stay in that 5 days.</small><br>
+            <small style="color: #6c757d;">Check-in at 11:00 AM | Check-out at 01:00 AM</small>
+
+            <!-- People -->
+            <div class="form-group">
+                <label for="people">Number of People:</label>
+                <input type="number" id="people" name="people" min="1" max="<%= listing.capacity %>" required
+                    value="<%= bookingdata && bookingdata.people ? bookingdata.people : '' %>">
+                <small id="peopleError" style="color: red; display: none;"></small>
+            </div>
+
+            <!-- Price -->
+            <div class="form-group">
+                <label for="totalPrice">Price:</label>
+                <input type="text" id="totalPrice" name="totalPrice"
+                    placeholder="Price will be calculated automaticallyas per you booking of day" readonly>
+                <label>Total Price (incl. 18% GST):</label>
+                <div id="gstPriceDisplay" style="font-weight: bold; color: #28a745;">--</div>
+                <p>NOTE - You are temporarily reserving this property. To confirm your booking, please complete the
+                    payment from your profile section in next 24 hours.</p>
+            </div>
+
+            <br><br>
+            <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
+        </div>
+        </div>
+    </body>
+
+    <script>
+        const peopleInput = document.getElementById('people');
+        const peopleError = document.getElementById('peopleError');
+        const maxCapacity = <%= listing.capacity %>;
+
+        const checkInInput = document.getElementById('checkIn');
+        const checkOutInput = document.getElementById('checkOut');
+        const totalPriceInput = document.getElementById('totalPrice');
+        const gstPriceDisplay = document.getElementById('gstPriceDisplay');
+        const pricePerNight = <%= listing.price %>;
+
+        // Validate number of people
+        peopleInput.addEventListener('input', () => {
+            const value = parseInt(peopleInput.value);
+            if (!value || value < 1 || value > maxCapacity) {
+                peopleError.textContent = `Number of people must be between 1 and ${maxCapacity}.`;
+                peopleError.style.display = 'block';
+            } else {
+                peopleError.style.display = 'none';
+            }
+        });
+
+        // Real-time update on date input
+        checkInInput.addEventListener('change', calculateTotalPrice);
+        checkOutInput.addEventListener('change', calculateTotalPrice);
+
+calculateTotalPrice()
+
+        function calculateTotalPrice() {
+            const totalDaysDisplay = document.getElementById('totalDaysDisplay');
+
+            if (checkInInput.value && checkOutInput.value) {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+
+                // Use calendar days difference, not time diff
+                const timeDiffDays = Math.floor((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+
+                if (timeDiffDays > 0) {
+                    const basePrice = pricePerNight * timeDiffDays;
+                    const priceWithGst = basePrice * 1.18;
+
+                    totalPriceInput.value = `₹ ${basePrice.toLocaleString("en-IN")} /-`;
+                    gstPriceDisplay.innerHTML = `₹ ${priceWithGst.toLocaleString("en-IN", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })} /-`;
+                    totalDaysDisplay.textContent = `${timeDiffDays} day${timeDiffDays > 1 ? 's' : ''}`;
+                } else {
+                    totalPriceInput.value = "Invalid Date Range";
+                    gstPriceDisplay.innerHTML = "--";
+                    totalDaysDisplay.textContent = "--";
+                }
+            } else {
+                totalDaysDisplay.textContent = "--";
+                totalPriceInput.value = "";
+                gstPriceDisplay.innerHTML = "--";
+            }
+        }
+
+        // Final form validation before submit
+        function validateBookingForm() {
+            let valid = true;
+
+            const checkInError = document.getElementById('checkInError');
+            const checkOutError = document.getElementById('checkOutError');
+            checkInError.style.display = 'none';
+            checkOutError.style.display = 'none';
+
+            if (!checkInInput.value) {
+                checkInError.textContent = "Please select a check-in date.";
+                checkInError.style.display = 'block';
+                valid = false;
+            }
+
+            if (!checkOutInput.value) {
+                checkOutError.textContent = "Please select a check-out date.";
+                checkOutError.style.display = 'block';
+                valid = false;
+            }
+
+            if (checkInInput.value && checkOutInput.value) {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+                if (checkOutDate <= checkInDate) {
+                    checkOutError.textContent = "Check-out date must be after check-in date.";
+                    checkOutError.style.display = 'block';
+                    valid = false;
+                }
+            }
+
+            const peopleCount = parseInt(peopleInput.value);
+            if (!peopleCount || peopleCount < 1 || peopleCount > maxCapacity) {
+                peopleError.textContent = `Number of people must be between 1 and ${maxCapacity}.`;
+                peopleError.style.display = 'block';
+                valid = false;
+            }
+
+            return valid;
+        }
+
+
+
+
+
+
+
+        //     const checkInInput = document.getElementById('checkIn');
+        //     const checkOutInput = document.getElementById('checkOut');
+        const checkInError = document.getElementById('checkInError');
+        const checkOutError = document.getElementById('checkOutError');
+        const totalDaysDisplay = document.getElementById('totalDaysDisplay');
+
+        const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+        // Print today’s date in YYYY-MM-DD format
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0];
+        console.log("Today's Date:", formattedToday);
+
+        function validateDates() {
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            let isValid = true;
+
+            // Validate Check-In at least 15 days from today
+            const diffFromToday = Math.floor((checkInDate - today) / MS_PER_DAY);
+            if (diffFromToday < 15) {
+                checkInError.textContent = "Check-in must be at least 15 days from today.";
+                checkInError.style.display = "block";
+                isValid = false;
+            } else {
+                checkInError.textContent = "";
+                checkInError.style.display = "none";
+            }
+
+            // Validate Check-Out after Check-In
+            if (checkOutDate <= checkInDate) {
+                checkOutError.textContent = "Check-out must be after Check-in.";
+                checkOutError.style.display = "block";
+                isValid = false;
+            } else {
+                checkOutError.textContent = "";
+                checkOutError.style.display = "none";
+            }
+
+            // Show total days
+            if (checkOutDate > checkInDate) {
+                const totalDays = Math.floor((checkOutDate - checkInDate) / MS_PER_DAY);
+                totalDaysDisplay.textContent = totalDays + " day(s)";
+            } else {
+                totalDaysDisplay.textContent = "--";
+            }
+
+            return isValid;
+        }
+
+        checkInInput.addEventListener('change', validateDates);
+        checkOutInput.addEventListener('change', validateDates);
+
+
+
+
+    </script>

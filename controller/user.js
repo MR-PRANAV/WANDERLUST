@@ -1,5 +1,7 @@
 const user = require("../models/user.js");
 const Listing = require("../models/listing");
+const Booking = require("../models/booking.js");
+const { cloudinary } = require("../cloudConfig.js");
 
 module.exports.signUpRender = async (req, res) => {
 res.render("users/signup");
@@ -52,15 +54,27 @@ module.exports.logout =  async (req, res, next)=>{
 module.exports.Profile = async (req, res) => {
   try {
     let curr_user = res.locals.currUser;
-    // console.log("CUR USER ID", curr_user._id);
+
+    // Populate 'listing' and 'user' for each booking
+let curuserbookings = await Booking.find({ user: curr_user._id })
+  .populate('listing', null, 'listing') // Update the model name to 'listing'
+  .populate('user');
+      
+    // console.log("Current User Bookings:", curuserbookings);
+
     let curuserlistings = await Listing.find({ owner: curr_user._id });
-    // console.log("CUR USER LISTINGS", curuserlistings);
-    res.render("users/profile", { curr_user, curuserlistings });
+
+    res.render("users/profile", {
+      curr_user,
+      curuserlistings,
+      curuserbookings,
+    });
   } catch (error) {
     console.error("Error fetching user listings:", error);
     res.status(500).send("Server Error");
   }
 };
+
 
 module.exports.allUser = async (req, res) => {
   let curr_user = res.locals.currUser;
@@ -112,8 +126,8 @@ module.exports.forgotpassword_forgot_post = async (req, res) => {
             from: 'yourproject@support.com',
             subject: 'Password Reset',
             text: `
-                You are receiving this because you have requested the reset of the password for your WanderLust account.\n\n
-                Please click on the following link to complete the process:\n\n
+                You are receiving this by Wanderlust because you have requested the reset of the password for your account.\n\n
+                Please click on the following link to complete the process for resetting your password:\n\n
                 http://${req.headers.host}/reset/${token}\n\n
                 If you did not request this, please ignore this email and your password will remain unchanged OR safe at only your side.\n`,
         };
@@ -153,7 +167,7 @@ module.exports.forgotpassword_resettoken_get = async (req, res) => {
 }
 
 module.exports.forgotpassword_resettoken_post = async (req, res) => {
-  console.log( "TOKEN IS - ", req.params.token)
+  // console.log( "TOKEN IS - ", req.params.token)
 
   try {
     // console.log("psaaword update started");

@@ -1,37 +1,63 @@
 <% layout("/layouts/boilerplate") %>
 
-<body class="HOME-BODY">
+<body class="HOME-BODY" style="width:100vw;">
   
-    <div class="home-container">
-        <h1> Wanderlust Travel Booking </h1>
-       
-            <!-- <img class="search-section-img" src="other\IMG\homeimg.jpg" alt="sdsds">
-            <div class="form-boxa">
-                <h2>Friendly holiday rentals at your <br><i>Dream Location</i></h2>
-                <h2> A place to call home
-                    on your next adventure</h2>
-                <p>Discover dreamy villas, houses, cabins & more</p>
-                <p>Find <strike>and book</strike> unique & friendly homes on Wanderlust...</p>
-                <a class="nav-link" href="/listings">
-                <button class="search-btn">Find Yours</button>
-                </a>
-            </div> -->
+    <div class="home-container" style="max-width: 1400px; width: 95vw;"></div>
+        <h1 class="text-center"> Wanderlust Travel Booking </h1>
 
-        <div class="search-section">
-            <div class="search-section-img">
-                <img src="other/IMG/homeimg.jpg" alt="homeimg">
+          
+
+        <div class="search-section" style="width:100%;">
+            <div class="search-section-img" style="width:50%;">
+                <img src="other/IMG/homeimg.jpg" alt="homeimg" style="width:100%;">
             </div>
-            <div class="form-boxaa">
+            <div class="form-boxaa" style="width:50%;">
                 <h2>Friendly holiday rentals at your <br><i>Dream Location</i></h2>
                 <h2> A place to call home
                     on your next adventure</h2>
-                <p>Discover dreamy villas, houses, cabins & more</p>
-                <p>Find <strike>and book</strike> unique & friendly homes on Wanderlust...</p>
-                <a class="nav-link" href="/listings">
+            
+                <!-- <p>Find <strike>and book</strike> unique & friendly homes on Wanderlust...</p> -->
+                <!-- <a class="nav-link" href="/listings">
                     <button class="search-btn">Find Your Dream Home</button>
-                </a>
+                </a> -->
+
+<form action="/search" method="GET" class="mb-4 p-4 bg-light rounded shadow-sm h-100" style="box-shadow: 0 0.5rem 2rem rgba(0,0,0,.25)!important;">
+        <div class="row g-3">
+            <p class="text-center" style="color: coral;">Discover dreamy villas, houses, cabins & more</p>
+            <p class="text-center" style="color: coral; margin-top: -15px;">Find <strike>and book</strike> unique & friendly homes on Wanderlust...</p>
+
+            <div style="display: flex; justify-content: space-evenly;">
+                    <div class="col-md-6">
+                    <input type="text" name="location" class="form-control" placeholder="Location" required>
+                    </div>
+
+                    <div class="col-md-3">
+                    <input type="number" name="people" class="form-control" min="1" placeholder="No. of People" required>
+                    </div>
+            </div>
+            <div style="display: flex; justify-content: space-evenly;">
+                    <div class="col-md-4">
+                    <input type="date" name="checkIn" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                    <input type="date" name="checkOut" class="form-control" required>
+                    </div>
+            </div>
+                  
+            <div style="display: flex; justify-content: space-evenly;">        
+                    <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+            </div>
+           </div>
+    </form>
+
+
             </div>
         </div>
+
+
 
 
 
@@ -109,6 +135,7 @@
         </div>
         <br><br><br><br>    
     </div>
+  
 </body>
 
 

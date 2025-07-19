@@ -4,8 +4,6 @@
 
   <div class="filters">
 
-    
-
     <div class="filter-a">
       <div class="filter-close" onclick="closefilters()">
         <i class="fa-solid fa-xmark"></i>
@@ -107,6 +105,10 @@
     <!-- ------------------------------------- -->
   </div>
 
+  
+
+
+
   <br />
   <% if (listings) { %>
     <h6 class="explore-page-title-ALL-LOCATION">ALL LOCATION'S</h6>
@@ -125,16 +127,19 @@
             +18% GST ( ₹ <%= (LISTING.price * 1.18).toLocaleString("en-IN") %> )
           </i>
         </p>
-        <a href="/listings/<%= LISTING.id %>">
-            <button class="button">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 -3 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
-              </svg>
-              <div class="text">
-                More
-              </div>
-            </button>
-        </a>
+        <form action="/listings/<%= LISTING.id %>" method="GET" style="display:inline;">
+          <% if (typeof bookingdata !== "undefined" && bookingdata) { %>
+            <input type="hidden" name="bookingdata" value='<%= JSON.stringify(bookingdata) %>'>
+          <% } %>
+          <button class="button" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path>
+            </svg>
+            <div class="text">
+              More
+            </div>
+          </button>
+        </form>
       </div>
     </div>
     <% } %>
