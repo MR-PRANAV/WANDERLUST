@@ -33,7 +33,7 @@ MAJOR-PRO is a full-featured platform for discovering, booking, and managing eve
   - Expiry timer and auto-cancel for unpaid bookings.
 
 - 🛠️ **Admin & Owner Controls:**  
-  - Manage listings, view all bookings, and moderate users.
+  - Manage listings, view all bookings (including bookings made by others on your properties), and moderate users.
 
 - 📱 **Responsive UI:**  
   Clean design using Bootstrap 5 and custom CSS.
@@ -95,8 +95,8 @@ app.js
 - 🛎️ **Booking Page:**  
   Pre-filled with search data, real-time validation, and price calculation.
 
-- 📄 **Admin/Owner:**  
-  Manage properties, bookings, and users.
+- 🏢 **Owner/Admin Dashboard:**  
+  Manage your own listings, see bookings made by others on your properties, and moderate users.
 
 ---
 
@@ -124,4 +124,47 @@ Admins and property owners can manage listings, bookings, and user communication
 
 ---
 
-> For more details, explore the
+## 📦 Getting Started
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/yourusername/major-pro.git
+   cd major-pro
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+
+3. **Set up your environment variables:**
+   - Create a `.env` file with your MongoDB URI, Cloudinary credentials, and session secret.
+
+4. **Run the app:**
+   ```sh
+   nodemon app.js
+   ```
+   or
+   ```sh
+   node app.js
+   ```
+
+5. **Visit:**  
+   [http://localhost:8080](http://localhost:8080)
+
+---
+
+## 🙌 Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+> For more details, explore the codebase and EJS views for each feature and workflow.  
+> **Happy Booking!**
